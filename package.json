@@ -1,0 +1,36 @@
+{
+  "name": "24001143-synrgy7-arm-bcr-ch6",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node-dev --respawn ./index.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.4.5",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "knex": "^3.0.1",
+    "objection": "^3.1.2",
+    "pg": "^8.11.3",
+    "swagger-ui-express": "^5.0.0",
+    "uuid": "^9.0.1",
+    "yamljs": "^0.3.0"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/express": "^4.17.17",
+    "@types/jsonwebtoken": "^9.0.6",
+    "@types/node": "^20.6.0",
+    "@types/pg": "^8.10.9",
+    "@types/swagger-ui-express": "^4.1.6",
+    "@types/uuid": "^9.0.8",
+    "@types/yamljs": "^0.2.34",
+    "ts-node": "^10.9.1",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.2.2"
+  }
+}

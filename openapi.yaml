@@ -1,0 +1,1115 @@
+openapi: 3.0.0
+info:
+  title: Open API Documentation
+  description: API for car management dashboard
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000/api
+paths:
+  /auth/login/superadmin:
+    post:
+      summary: Login as Superadmin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: Superadmin email
+                password:
+                  type: string
+                  description: Superadmin password
+      responses:
+        "400":
+          description: Invalid request or credentials - Missing fields and incorrect email or password
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+        "403":
+          description: Forbidden - Superadmin login only
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+        "201":
+          description: Login successful for Superadmin
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Success message
+                  token:
+                    type: string
+                    description: JWT token for authentication
+                  role:
+                    type: string
+                    description: User role
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Internal Server Error
+                  error:
+                    error: string
+                    description: Error message
+
+  /auth/login:
+    post:
+      summary: Login as Admin or Member
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: User email
+                password:
+                  type: string
+                  description: User password
+      responses:
+        "400":
+          description: Invalid request or credentials - Missing fields and incorrect email or password
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+        "403":
+          description: Forbidden - Admin or Member login only
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+        "201":
+          description: Login successful for Admin or Member
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Success message
+                  token:
+                    type: string
+                    description: JWT token for authentication
+                  role:
+                    type: string
+                    description: User role
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Internal Server Error
+                  error:
+                    error: string
+                    description: Error message
+
+  /auth/register:
+    post:
+      summary: Register a new member
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: User's username
+                email:
+                  type: string
+                  description: User's email
+                password:
+                  type: string
+                  description: User's password
+      responses:
+        "400":
+          description: Invalid request or credentials - Missing fields and existing email or username
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+        "201":
+          description: Member successfully registered
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Success message
+        "409":
+          description: Conflict - Username or email already exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Internal Server Error
+                  error:
+                    error: string
+                    description: Error message
+
+  /auth/me:
+    get:
+      summary: Get current user details
+      security:
+        - JWT: []
+      responses:
+        "200":
+          description: Success - Current user details retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Success message
+                  data:
+                    type: object
+                    description: Current user details
+                    properties:
+                      id:
+                        type: string
+                        description: User ID
+                      username:
+                        type: string
+                        description: User's username
+                      email:
+                        type: string
+                        description: User's email
+                      role:
+                        type: string
+                        description: User role
+        "401":
+          description: Unauthorized - Invalid token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Internal Server Error
+                  error:
+                    error: string
+                    description: Error message
+  /admin:
+    post:
+      summary: Register a new admin user
+      security:
+        - JWT: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: User's username
+                email:
+                  type: string
+                  description: User's email
+                password:
+                  type: string
+                  description: User's password
+      responses:
+        "400":
+          description: Invalid request or credentials - Missing fields and existing email or username
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+        "401":
+          description: Unauthorized - Invalid token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+        "201":
+          description: Admin user successfully registered
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Success message
+        "409":
+          description: Conflict - Username or email already exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+        "403":
+          description: Forbidden - Superadmin access only
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Internal Server Error
+                  error:
+                    error: string
+                    description: Error message
+    get:
+      summary: Get all admin users
+      security:
+        - JWT: []
+      responses:
+        "200":
+          description: Success - All admin users retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Success message
+                  data:
+                    type: array
+                    description: List of admin users
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: User ID
+                        username:
+                          type: string
+                          description: User's username
+                        email:
+                          type: string
+                          description: User's email
+                        password:
+                          type: string
+                          description: User's password
+                        role:
+                          type: string
+                          description: User role
+        "401":
+          description: Unauthorized - Invalid token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+        "403":
+          description: Forbidden - Superadmin access only
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Internal Server Error
+                  error:
+                    error: string
+                    description: Error message
+  /admin/{id}:
+    get:
+      summary: Get an admin user by ID
+      security:
+        - JWT: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: User ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success - Admin user retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Success message
+                  data:
+                    type: object
+                    description: Admin user details
+                    properties:
+                      id:
+                        type: string
+                        description: User ID
+                      username:
+                        type: string
+                        description: User's username
+                      email:
+                        type: string
+                        description: User's email
+                      password:
+                        type: string
+                        description: User's password
+                      role:
+                        type: string
+                        description: User role
+        "401":
+          description: Unauthorized - Invalid token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+        "403":
+          description: Forbidden - Superadmin access only
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+        "404":
+          description: Not Found - Admin user not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Internal Server Error
+                  error:
+                    error: string
+                    description: Error message
+    put:
+      summary: Update an admin user by ID
+      security:
+        - JWT: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: User ID
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: User's username
+                email:
+                  type: string
+                  description: User's email
+                password:
+                  type: string
+                  description: User's password
+      responses:
+        "200":
+          description: Success - Admin user updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Success message
+        "400":
+          description: Invalid request - Missing at least one field
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+        "401":
+          description: Unauthorized - Invalid token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+        "403":
+          description: Forbidden - Superadmin access only
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+        "404":
+          description: Not Found - Admin user not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Internal Server Error
+                  error:
+                    error: string
+                    description: Error message
+    delete:
+      summary: Delete an admin user by ID
+      security:
+        - JWT: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: User ID
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Success - Admin user deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Success message
+        "401":
+          description: Unauthorized - Invalid token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+        "403":
+          description: Forbidden - Superadmin access only
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+        "404":
+          description: Not Found - Admin user not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Internal Server Error
+                  error:
+                    error: string
+                    description: Error message
+  /cars:
+    post:
+      summary: Add a new car
+      security:
+        - JWT: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                car_name:
+                  type: string
+                  description: Car name
+                category:
+                  type: string
+                  description: Car category
+                price:
+                  type: number
+                  description: Car price
+                car_image:
+                  type: string
+                  description: Car image URL
+                rent_start:
+                  type: string
+                  format: date
+                  description: Car rent start date
+                rent_finish:
+                  type: string
+                  format: date
+                  description: Car rent finish date
+      responses:
+        "400":
+          description: Invalid request or credentials - Missing fields or incorrect price data type or incorrect category or rent finish date greater than rent start date or rent finish date can be filled only if rent start date is filled
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+        "401":
+          description: Unauthorized - Invalid token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+        "403":
+          description: Forbidden - Superadmin and Admin access only
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+        "201":
+          description: Car successfully added
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Success message
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Internal Server Error
+                  error:
+                    error: string
+                    description: Error message
+    get:
+      summary: Get all cars
+      security:
+        - JWT: []
+      responses:
+        "200":
+          description: Success - All cars or all available cars retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Success message
+                  data:
+                    type: array
+                    description: List of cars
+                    items:
+                      type: object
+                      properties:
+                        car_id:
+                          type: string
+                          description: Car ID
+                        car_name:
+                          type: string
+                          description: Car name
+                        category:
+                          type: string
+                          description: Car category
+                        start_rent:
+                          type: string
+                          format: date
+                          description: Car rent start date
+                        finish_rent:
+                          type: string
+                          format: date
+                          description: Car rent finish date
+                        price:
+                          type: number
+                          description: Car price
+                        created_at:
+                          type: string
+                          format: date-time
+                          description: Car created date
+                        updated_at:
+                          type: string
+                          format: date-time
+                          description: Car updated date
+                        created_by:
+                          type: string
+                          description: User ID who created the car
+                        updated_by:
+                          type: string
+                          description: User ID who updated the car
+                        deleted_status:
+                          type: string
+                          description: Car status
+                        deleted_by:
+                          type: string
+                          description: User ID who deleted the car
+                        car_image:
+                          type: string
+                          description: Car image URL
+        "401":
+          description: Unauthorized - Invalid token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Internal Server Error
+                  error:
+                    error: string
+                    description: Error message
+  /cars/{id}:
+    get:
+      summary: Get a car by ID
+      security:
+        - JWT: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Car ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success - Car retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Success message
+                  data:
+                    type: object
+                    description: Car details
+                    properties:
+                      car_id:
+                        type: string
+                        description: Car ID
+                      car_name:
+                        type: string
+                        description: Car name
+                      category:
+                        type: string
+                        description: Car category
+                      start_rent:
+                        type: string
+                        format: date
+                        description: Car rent start date
+                      finish_rent:
+                        type: string
+                        format: date
+                        description: Car rent finish date
+                      price:
+                        type: number
+                        description: Car price
+                      created_at:
+                        type: string
+                        format: date-time
+                        description: Car created date
+                      updated_at:
+                        type: string
+                        format: date-time
+                        description: Car updated date
+                      created_by:
+                        type: string
+                        description: User ID who created the car
+                      updated_by:
+                        type: string
+                        description: User ID who updated the car
+                      deleted_status:
+                        type: string
+                        description: Car status
+                      deleted_by:
+                        type: string
+                        description: User ID who deleted the car
+                      car_image:
+                        type: string
+                        description: Car image URL
+        "401":
+          description: Unauthorized - Invalid token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+        "403":
+          description: Forbidden - Superadmin and Admin access only
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+        "404":
+          description: Not Found - Car not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Internal Server Error
+                  error:
+                    error: string
+                    description: Error message
+    put:
+      summary: Update a car by ID
+      security:
+        - JWT: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Car ID
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                car_name:
+                  type: string
+                  description: Car name
+                category:
+                  type: string
+                  description: Car category
+                price:
+                  type: number
+                  description: Car price
+                car_image:
+                  type: string
+                  description: Car image URL
+                rent_start:
+                  type: string
+                  format: date
+                  description: Car rent start date
+                rent_finish:
+                  type: string
+                  format: date
+                  description: Car rent finish date
+      responses:
+        "200":
+          description: Success - Car updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Success message
+        "400":
+          description: Invalid request - Missing at least one field or incorrect price data type or incorrect category or rent finish date greater than rent start date or rent finish date can be filled only if rent start date is filled
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+        "401":
+          description: Unauthorized - Invalid token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+        "403":
+          description: Forbidden - Superadmin and Admin access only
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+        "404":
+          description: Not Found - Car not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Internal Server Error
+                  error:
+                    error: string
+                    description: Error message
+    delete:
+      summary: Delete a car by ID
+      security:
+        - JWT: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Car ID
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Success - Car deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Success message
+        "401":
+          description: Unauthorized - Invalid token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+        "403":
+          description: Forbidden - Superadmin and Admin access only
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+        "404":
+          description: Not Found - Car not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Internal Server Error
+                  error:
+                    error: string
+                    description: Error message
+components:
+  securitySchemes:
+    JWT:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
