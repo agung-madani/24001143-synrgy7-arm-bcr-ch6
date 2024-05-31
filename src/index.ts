@@ -2,10 +2,10 @@ import express, { Express } from "express";
 import Knex from "knex";
 import { Model } from "objection";
 import dotenv from "dotenv";
-import router from "./routes/routes";
+import router from "./routes/index";
 import swaggerUi from "swagger-ui-express";
 // import YAML from "yamljs";
-const swaggerDocument = require("./openapi.json");
+const swaggerDocument = require("./docs/openapi.json");
 
 dotenv.config();
 const knexInstance = Knex({
@@ -20,7 +20,7 @@ const knexInstance = Knex({
 });
 Model.knex(knexInstance);
 const app: Express = express();
-// const swaggerDocument = JSON.load("./openapi.json");
+// const swaggerDocument = YAML.load("./openapi.yaml");
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 const port = 3000;
 app.use(express.urlencoded({ extended: false }));
