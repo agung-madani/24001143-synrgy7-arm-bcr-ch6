@@ -7,7 +7,7 @@ This repository provides a comprehensive framework for building robust web appli
 1. Clone the repository:
 
 ```sh
-git clone <repository-url>
+git clone https://github.com/agung-madani/24001143-synrgy7-arm-bcr-ch6.git
 ```
 
 2. Install the dependencies:
@@ -23,6 +23,7 @@ npm install
 - `DB_PORT`: Your PostgreSQL port (usually 5432)
 - `DB_HOST`: Your PostgreSQL host
 - `DB_NAME`: The name of your PostgreSQL database
+- `JWT_SECRET`: Secret key for JSON Web Token (JWT) encryption
 
 4. Run the migrations:
 
@@ -30,7 +31,13 @@ npm install
 npx knex migrate:latest
 ```
 
-5. Start the server:
+5. Run the seeds:
+
+```sh
+npx knex seed:run
+```
+
+6. Start the server:
 
 ```sh
 npm start
